@@ -81,14 +81,14 @@ async function getBlogOutline() {
 
     logDetail.title = $(el).text();
     if (link.includes(" ")) {
-      logDetail.link = link.replace(" ", "%20");
+      logDetail.link = baseUrl + link.replace(" ", "%20");
     } else {
       logDetail.link = link;
     }
     outline.push(logDetail);
   });
 
-  const outlineFilter = outline.slice(0, 8);
+  const outlineFilter = outline.slice(0, MAX_LINES);
 
   return outlineFilter;
 }
