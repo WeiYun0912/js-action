@@ -7,6 +7,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Updates Blog Outline
-      uses: WeiYun0912/js-action@v2.11
+      uses: WeiYun0912/js-action@v2.12
       with:
+        COMMITTER_USERNAME : "WeiYun0912"
+        COMMITTER_EMAIL : "yher25@gmail.com"
         MAX_LINES: '8'

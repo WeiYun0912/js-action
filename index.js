@@ -1,13 +1,56 @@
 const core = require("@actions/core");
-const github = require("@actions/github");
 const { Toolkit } = require("actions-toolkit");
 const fs = require("fs");
 const cheerio = require("cheerio");
 const axios = require("axios");
+const { spawn } = require("child_process");
 
+// yml input
+const GH_TOKEN = core.getInput("GH_TOKEN");
 const MAX_LINES = core.getInput("MAX_LINES");
+const COMMITTER_USERNAME = core.getInput("COMMITTER_USERNAME");
+const COMMITTER_EMAIL = core.getInput("COMMITTER_EMAIL");
+const COMMIT_MSG = core.getInput("COMMIT_MSG");
+
+core.setSecret(GH_TOKEN);
 
 const baseUrl = "https://weiyun0912.github.io";
+
+const exec = (cmd, args = []) =>
+  new Promise((resolve, reject) => {
+    const app = spawn(cmd, args, { stdio: "pipe" });
+    let stdout = "";
+    app.stdout.on("data", (data) => {
+      stdout = data;
+    });
+    app.on("close", (code) => {
+      if (code !== 0 && !stdout.includes("nothing to commit")) {
+        err = new Error(`Invalid status code: ${code}`);
+        err.code = code;
+        return reject(err);
+      }
+      return resolve(code);
+    });
+    app.on("error", reject);
+  });
+
+const commitReadmeFile = async () => {
+  await exec("git", ["config", "--global", "user.email", COMMITTER_EMAIL]);
+
+  if (GH_TOKEN) {
+    await exec("git", [
+      "remote",
+      "set-url",
+      "origin",
+      `https://${GH_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`,
+    ]);
+  }
+
+  await exec("git", ["config", "--global", "user.name", COMMITTER_USERNAME]);
+  await exec("git", ["add", "README.md"]);
+  await exec("git", ["commit", "-m", COMMIT_MSG]);
+  await exec("git", ["push"]);
+};
 
 async function getBlogOutline() {
   const { data } = await axios.get(
@@ -32,7 +75,7 @@ async function getBlogOutline() {
     outline.push(logDetail);
   });
 
-  const outlineFilter = outline.slice(0, "5");
+  const outlineFilter = outline.slice(0, MAX_LINES);
   console.log(outlineFilter);
   return outlineFilter;
 }
@@ -77,7 +120,15 @@ Toolkit.run(async (tools) => {
     // );
 
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
+
+    try {
+      await commitReadmeFile();
+    } catch (error) {
+      tools.log.debug("Something went wrong");
+      return tools.exit.failure(error);
+    }
+    tools.exit.success("Wrote to README");
   }
 
-  tools.exit.success("down.");
+  //   tools.exit.success("down.");
 });
