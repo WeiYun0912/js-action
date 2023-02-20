@@ -1,13 +1,10 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: "My Blog Outline"
+description: "Updates README.md with the recent blog outline"
 inputs:
-  sitemap:  # id of input
-    description: 'sitemap'
-    required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  MAX_LINES:
+    description: "Max Lines"
+    default: "5"
+    required: false
 runs:
   using: 'node12'
   main: 'index.js'
