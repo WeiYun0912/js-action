@@ -109,7 +109,7 @@ Toolkit.run(async (tools) => {
     return tools.exit.failure("Not Found End Update Comments");
 
   const outline = await getBlogOutline();
-  if (startIndex !== -1 && endIndex !== -1) {
+  if (startIndex !== -1 && endIndex === -1) {
     startIndex++; //next line
 
     outline.forEach((o, index) => {
@@ -120,15 +120,13 @@ Toolkit.run(async (tools) => {
       );
     });
 
-    // readmeContent.splice(
-    //   startIndex + activitys.length,
-    //   0,
-    //   "<!-- UPDATE_WEISITE:END -->"
-    // );
+    readmeContent.splice(
+      startIndex + outline.length,
+      0,
+      "<!-- UPDATE_WEISITE:END -->"
+    );
 
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
-
-    console.log(process.env.GITHUB_REPOSITORY);
 
     try {
       await commitReadmeFile();
@@ -139,5 +137,7 @@ Toolkit.run(async (tools) => {
     tools.exit.success("Wrote to README");
   }
 
-  //   tools.exit.success("down");
+  tools.exit.success("Success");
+
+  // TBD (Compare Diff)
 });
