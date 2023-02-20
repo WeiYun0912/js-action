@@ -139,5 +139,5 @@ Toolkit.run(async (tools) => {
     tools.exit.success("Wrote to README");
   }
 
-  //   tools.exit.success("down....");
+  //   tools.exit.success("down");
 });
