@@ -77,11 +77,11 @@ async function getBlogOutline() {
       link: "",
     };
 
-    const link = $(el).children().attr("href");
+    const link = baseUrl + $(el).children().attr("href");
 
     logDetail.title = $(el).text();
     if (link.includes(" ")) {
-      logDetail.link = baseUrl + link.replace(" ", "%20");
+      logDetail.link = link.replace(" ", "%20");
     } else {
       logDetail.link = link;
     }
