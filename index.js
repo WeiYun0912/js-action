@@ -77,13 +77,19 @@ async function getBlogOutline() {
       link: "",
     };
 
-    logDetail.title = $(el).text();
-    logDetail.link = baseUrl + $(el).children().attr("href");
+    const link = $(el).children().attr("href");
 
+    logDetail.title = $(el).text();
+    if (link.includes(" ")) {
+      logDetail.link = link.replace(" ", "%20");
+    } else {
+      logDetail.link = link;
+    }
     outline.push(logDetail);
   });
 
-  const outlineFilter = outline.slice(0, MAX_LINES);
+  const outlineFilter = outline.slice(0, 8);
+
   return outlineFilter;
 }
 
@@ -106,6 +112,7 @@ Toolkit.run(async (tools) => {
   );
 
   const outline = await getBlogOutline();
+
   if (startIndex !== -1 && endIndex === -1) {
     startIndex++; //next line
 
@@ -126,7 +133,7 @@ Toolkit.run(async (tools) => {
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
     try {
-      await commitReadmeFile();
+      // await commitReadmeFile();
     } catch (error) {
       tools.log.debug("Something went wrong");
       return tools.exit.failure(error);
@@ -134,7 +141,52 @@ Toolkit.run(async (tools) => {
     tools.exit.success("Wrote to README");
   }
 
-  tools.exit.success("Success");
+  const oldContent = readmeContent.slice(startIndex + 1, endIndex).join("\n");
+  const newContent = outline
+    .map((o) => `- ${o.title} [連結](${o.link})`)
+    .join("\n");
 
-  // TBD (Compare Diff...)
+  const compareOldContent = oldContent.replace(/(?:\\[rn]|[\r\n]+)+/g, "");
+
+  const compareNewContentt = newContent.replace(/(?:\\[rn]|[\r\n]+)+/g, "");
+
+  if (compareOldContent === compareNewContentt)
+    tools.exit.success("Same result");
+
+  startIndex++;
+
+  const readmeContentUpdate = readmeContent.slice(startIndex, endIndex);
+  // 當 tag 內沒有東西的時候才更新內容進去
+  //<!-- UPDATE_WEISITE:START -->
+  //<!-- UPDATE_WEISITE:END -->
+  if (!readmeContentUpdate.length) {
+    outline.some((o, idx) => {
+      if (!o) {
+        return true;
+      }
+      readmeContent.splice(
+        startIndex + idx,
+        0,
+        `- ${o.title} [連結](${o.link})`
+      );
+    });
+    tools.log.success("Wrote to README");
+  } else {
+    startIndex++;
+    //先把內容清空
+    readmeContent.splice(startIndex, endIndex - startIndex);
+    //重新把內容加進去
+    outline.forEach((o, index) => {
+      readmeContent.splice(
+        startIndex + index,
+        0,
+        `- ${o.title} [連結](${o.link})`
+      );
+    });
+    tools.log.success("Updated README with the recent activity");
+  }
+
+  fs.writeFileSync("./README.md", readmeContent.join("\n"));
+
+  tools.exit.success("Success");
 });
