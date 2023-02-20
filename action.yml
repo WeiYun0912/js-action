@@ -2,7 +2,7 @@ name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
   sitemap:  # id of input
-    description: 'doc sitemap'
+    description: 'sitemap'
     required: true
     default: 'World'
 outputs:
