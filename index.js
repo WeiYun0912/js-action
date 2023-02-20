@@ -19,7 +19,7 @@ const fs = require("fs");
 Toolkit.run(async (tools) => {
   tools.log.debug("Edit README.md Start...");
 
-  const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
+  const readmeContent = fs.readFileSync("README.md", "utf-8").split("\n");
   console.log(readmeContent);
   tools.exit.success("down.");
 });
