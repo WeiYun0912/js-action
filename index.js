@@ -105,9 +105,6 @@ Toolkit.run(async (tools) => {
     (content) => content.trim() === "<!-- UPDATE_WEISITE:END -->"
   );
 
-  if (endIndex === -1)
-    return tools.exit.failure("Not Found End Update Comments");
-
   const outline = await getBlogOutline();
   if (startIndex !== -1 && endIndex === -1) {
     startIndex++; //next line
