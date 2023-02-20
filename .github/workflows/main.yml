@@ -7,7 +7,7 @@ jobs:
     steps:
     - name: Hello world action step
       id: hello
-      uses: WeiYun0912/js-action@v2
+      uses: WeiYun0912/js-action@v2.1
       with:
         sitemap: 'https://weiyun0912.github.io/Wei-Docusaurus/sitemap.xml'
     # Use the output from the `hello` step
