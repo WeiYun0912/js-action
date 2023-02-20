@@ -5,11 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
+    - uses: actions/checkout@v2
     - name: Hello world action step
       id: hello
-      uses: WeiYun0912/js-action@v2.9
+      uses: WeiYun0912/js-action@v2.10
       with:
         sitemap: 'https://weiyun0912.github.io/Wei-Docusaurus/sitemap.xml'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
