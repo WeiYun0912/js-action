@@ -2,7 +2,7 @@
 
 ```
 git add .
-git tag -a -m "my github action" v1
+git tag -a -m "my github action" v1 (tag version)
 git commit -m "some message..."
 git push --follow-tags
 ```
