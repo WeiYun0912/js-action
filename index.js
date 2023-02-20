@@ -16,50 +16,48 @@ core.setSecret(GH_TOKEN);
 
 const baseUrl = "https://weiyun0912.github.io";
 
-const exec = (cmd, args = []) =>
+const exec = (cmd, args = [], options = {}) =>
   new Promise((resolve, reject) => {
-    const app = spawn(cmd, args, { stdio: "pipe" });
-    let stdout = "";
-    app.stdout.on("data", (data) => {
-      stdout = data;
-    });
+    let outputData = "";
+    const optionsToCLI = {
+      ...options,
+    };
+    if (!optionsToCLI.stdio) {
+      Object.assign(optionsToCLI, { stdio: ["inherit", "inherit", "inherit"] });
+    }
+    const app = spawn(cmd, args, optionsToCLI);
+    if (app.stdout) {
+      // Only needed for pipes
+      app.stdout.on("data", function (data) {
+        outputData += data.toString();
+      });
+    }
+
     app.on("close", (code) => {
-      if (code !== 0 && !stdout.includes("nothing to commit")) {
-        err = new Error(`Invalid status code: ${code}`);
-        err.code = code;
-        return reject(err);
+      if (code !== 0) {
+        return reject({ code, outputData });
       }
-      return resolve(code);
+      return resolve({ code, outputData });
     });
-    app.on("error", reject);
+    app.on("error", () => reject({ code: 1, outputData }));
   });
 
 const commitReadmeFile = async () => {
-  await exec("git", [
-    "config",
-    "--global",
-    "user.email",
-    "41898282+github-actions[bot]@users.noreply.github.com",
-  ]);
-  await exec("git", ["config", "--global", "user.name", "readme-bot"]);
-  await exec("git", ["add", "README.md"]);
+  await exec("git", ["config", "--global", "user.email", COMMITTER_EMAIL]);
+
+  if (GH_TOKEN) {
+    await exec("git", [
+      "remote",
+      "set-url",
+      "origin",
+      `https://${GH_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`,
+    ]);
+  }
+
+  await exec("git", ["config", "--global", "user.name", COMMITTER_USERNAME]);
+  await exec("git", ["add", "."]);
   await exec("git", ["commit", "-m", COMMIT_MSG]);
   await exec("git", ["push"]);
-  //   await exec("git", ["config", "--global", "user.email", COMMITTER_EMAIL]);
-
-  //   if (GH_TOKEN) {
-  //     await exec("git", [
-  //       "remote",
-  //       "set-url",
-  //       "origin",
-  //       `https://${GH_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`,
-  //     ]);
-  //   }
-
-  //   await exec("git", ["config", "--global", "user.name", COMMITTER_USERNAME]);
-  //   await exec("git", ["add", "README.md"]);
-  //   await exec("git", ["commit", "-m", COMMIT_MSG]);
-  //   await exec("git", ["push"]);
 };
 
 async function getBlogOutline() {
@@ -129,6 +127,8 @@ Toolkit.run(async (tools) => {
     // );
 
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
+
+    console.log(process.env.GITHUB_REPOSITORY);
 
     try {
       await commitReadmeFile();
