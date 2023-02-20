@@ -16,5 +16,4 @@ git push --follow-tags
 - 2022-10-30：新增 使用 Skeleton 增加使用者體驗 文章。 [連結](/Wei-Docusaurus/docs/JavaScript/skeleton)
 - 2022-10-28：新增 實用的 VS Code 套件 (網頁開發) 文章。 [連結](/Wei-Docusaurus/docs/VS%20Code/vsCodeExtensions)
 - 2022-10-27：新增 React 使用 Lazy 與 Suspense 動態載入 Component 文章。 [連結](/Wei-Docusaurus/docs/React/Tips/React-Lazy)
-- 2022-10-24：新增 Storybook 介紹與實作 文章。 [連結](/Wei-Docusaurus/docs/Stroybook/Storybook-Basic)
 <!-- UPDATE_WEISITE:END -->
