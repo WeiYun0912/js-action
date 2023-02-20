@@ -76,7 +76,6 @@ async function getBlogOutline() {
   });
 
   const outlineFilter = outline.slice(0, MAX_LINES);
-  console.log(outlineFilter);
   return outlineFilter;
 }
 
@@ -120,13 +119,13 @@ Toolkit.run(async (tools) => {
     // );
 
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
-
-    try {
-      await commitReadmeFile();
-    } catch (error) {
-      tools.log.debug("Something went wrong");
-      return tools.exit.failure(error);
-    }
+    console.log(GH_TOKEN, COMMITTER_USERNAME, COMMITTER_EMAIL, COMMIT_MSG);
+    // try {
+    //   await commitReadmeFile();
+    // } catch (error) {
+    //   tools.log.debug("Something went wrong");
+    //   return tools.exit.failure(error);
+    // }
     tools.exit.success("Wrote to README");
   }
 
