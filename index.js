@@ -1,12 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
-const axios = require("axios");
-
-const getAPIData = async () => {
-  const data = await axios.get("https://jsonplaceholder.typicode.com/posts");
-  return data;
-};
-
+const { Toolkit } = require("actions-toolkit");
+const fs = require("fs");
 // try {
 //   // `who-to-greet` input defined in action metadata file
 //   const nameToGreet = core.getInput("sitemap");
@@ -21,7 +16,10 @@ const getAPIData = async () => {
 //   core.setFailed(error.message);
 // }
 
-(async () => {
-  const results = await getAPIData();
-  console.log(results.data); //
-})();
+Toolkit.run(async (tools) => {
+  tools.log.debug("Edit README.md Start...");
+
+  const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
+  console.log(readmeContent);
+  tools.exit.success("down.");
+});
