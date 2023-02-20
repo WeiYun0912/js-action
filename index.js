@@ -134,6 +134,7 @@ Toolkit.run(async (tools) => {
 
     try {
       await commitReadmeFile();
+      tools.log.success("Commit file success");
     } catch (error) {
       tools.log.debug("Something went wrong");
       return tools.exit.failure(error);
@@ -183,12 +184,13 @@ Toolkit.run(async (tools) => {
         `- ${o.title} [連結](${o.link})`
       );
     });
-    tools.log.success("Updated README with the recent activity");
+    tools.log.success("Updated README with the recent blog outline");
   }
 
   fs.writeFileSync("./README.md", readmeContent.join("\n"));
   try {
     await commitReadmeFile();
+    tools.log.success("Commit file success");
   } catch (err) {
     tools.log.debug("Something went wrong");
     return tools.exit.failure(err);
