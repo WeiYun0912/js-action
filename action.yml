@@ -1,7 +1,7 @@
 name: "My Blog Outline"
 description: "Updates README.md with the recent blog outline"
 inputs:
-  GH_TOKEN:
+  GITHUB_TOKEN:
     description: "Github token"
     default: ${{ github.token }}
     required: false

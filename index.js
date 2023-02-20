@@ -6,13 +6,13 @@ const axios = require("axios");
 const { spawn } = require("child_process");
 
 // yml input
-const GH_TOKEN = core.getInput("GH_TOKEN");
+const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 const MAX_LINES = core.getInput("MAX_LINES");
 const COMMITTER_USERNAME = core.getInput("COMMITTER_USERNAME");
 const COMMITTER_EMAIL = core.getInput("COMMITTER_EMAIL");
 const COMMIT_MSG = core.getInput("COMMIT_MSG");
 
-core.setSecret(GH_TOKEN);
+core.setSecret(GITHUB_TOKEN);
 
 const baseUrl = "https://weiyun0912.github.io";
 
@@ -45,12 +45,12 @@ const exec = (cmd, args = [], options = {}) =>
 const commitReadmeFile = async () => {
   await exec("git", ["config", "--global", "user.email", COMMITTER_EMAIL]);
 
-  if (GH_TOKEN) {
+  if (GITHUB_TOKEN) {
     await exec("git", [
       "remote",
       "set-url",
       "origin",
-      `https://${GH_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`,
+      `https://${GITHUB_TOKEN}@github.com/${process.env.GITHUB_REPOSITORY}.git`,
     ]);
   }
 
