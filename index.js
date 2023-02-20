@@ -23,5 +23,5 @@ const getAPIData = async () => {
 
 (async () => {
   const results = await getAPIData();
-  console.log(results); //
+  console.log(results.data); //
 })();
