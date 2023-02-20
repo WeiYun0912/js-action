@@ -5,9 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Updates Blog Outline
-      uses: WeiYun0912/js-action@v2.19
+      uses: WeiYun0912/js-action@v2.20
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COMMITTER_USERNAME : "WeiYun0912"
