@@ -7,11 +7,11 @@ jobs:
       contents: write
     name: Updates Blog Outline
     steps:
-    - uses: actions/checkout@v2
-    - name: Updates Blog Outline
-      uses: WeiYun0912/js-action@v1
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COMMITTER_USERNAME : "WeiYun0912"
-        COMMITTER_EMAIL : "yher25@gmail.com"
-        MAX_LINES: '8'
+      - uses: actions/checkout@v2
+      - name: Updates Blog Outline
+        uses: WeiYun0912/js-action@v1.1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITTER_USERNAME: "WeiYun0912"
+          COMMITTER_EMAIL: "yher25@gmail.com"
+          MAX_LINES: "8"

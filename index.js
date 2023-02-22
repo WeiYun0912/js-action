@@ -60,6 +60,7 @@ const commitReadmeFile = async () => {
   await exec("git", ["push"]);
 };
 
+// 爬自己的技術文章目錄
 async function getBlogOutline() {
   const { data } = await axios.get(
     "https://weiyun0912.github.io/Wei-Docusaurus/docs/intro"
@@ -88,7 +89,7 @@ async function getBlogOutline() {
     outline.push(logDetail);
   });
 
-  const outlineFilter = outline.slice(0, MAX_LINES);
+  const outlineFilter = outline.slice(0, 8);
 
   return outlineFilter;
 }
@@ -98,12 +99,12 @@ Toolkit.run(async (tools) => {
 
   const readmeContent = fs.readFileSync("./README.md", "utf-8").split("\n");
 
-  //find update comments
+  //找到 START TAG
   let startIndex = readmeContent.findIndex(
     (content) => content.trim() === "<!-- UPDATE_WEISITE:START -->"
   );
 
-  // not exists
+  // START TAG 不存在
   if (startIndex === -1)
     return tools.exit.failure("Not Found Start Update Comments");
 
@@ -113,6 +114,7 @@ Toolkit.run(async (tools) => {
 
   const outline = await getBlogOutline();
 
+  //只有 <!-- UPDATE_WEISITE:START --> 沒有 <!-- UPDATE_WEISITE:END -->
   if (startIndex !== -1 && endIndex === -1) {
     startIndex++; //next line
 
@@ -133,7 +135,7 @@ Toolkit.run(async (tools) => {
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
     try {
-      await commitReadmeFile();
+      // await commitReadmeFile();
       tools.log.success("Commit file success");
     } catch (error) {
       tools.log.debug("Something went wrong");
@@ -156,38 +158,23 @@ Toolkit.run(async (tools) => {
 
   startIndex++;
 
-  const readmeContentUpdate = readmeContent.slice(startIndex, endIndex);
-  // 當 tag 內沒有東西的時候才更新內容進去
-  //<!-- UPDATE_WEISITE:START -->
-  //<!-- UPDATE_WEISITE:END -->
-  if (!readmeContentUpdate.length) {
-    outline.some((o, idx) => {
-      if (!o) {
-        return true;
-      }
-      readmeContent.splice(
-        startIndex + idx,
-        0,
-        `- ${o.title} [連結](${o.link})`
-      );
-    });
-    tools.log.success("Wrote to README");
-  } else {
-    startIndex++;
-    //先把內容清空
-    readmeContent.splice(startIndex, endIndex - startIndex);
-    //重新把內容加進去
-    outline.forEach((o, index) => {
-      readmeContent.splice(
-        startIndex + index,
-        0,
-        `- ${o.title} [連結](${o.link})`
-      );
-    });
-    tools.log.success("Updated README with the recent blog outline");
-  }
+  // 把 <!-- UPDATE_WEISITE:START --> 到 <!-- UPDATE_WEISITE:END --> 間的內容刪掉
+  // 取得 START ~ END 的間隙
+  let gap = endIndex - startIndex;
+  readmeContent.splice(startIndex, gap);
+
+  //重新把內容加進去
+  outline.forEach((o, index) => {
+    readmeContent.splice(
+      startIndex + index,
+      0,
+      `- ${o.title} [連結](${o.link})`
+    );
+  });
+  tools.log.success("Updated README with the recent blog outline");
 
   fs.writeFileSync("./README.md", readmeContent.join("\n"));
+
   try {
     await commitReadmeFile();
     tools.log.success("Commit file success");
