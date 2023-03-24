@@ -8,6 +8,7 @@ git push --follow-tags
 ```
 
 <!-- UPDATE_WEISITE:START -->
+<<<<<<< HEAD
 - 2023-03-21：新增 TypeScript Zod 文章。 [連結](https://wei-docusaurus-vercel.vercel.app/docs/TypeScript/TypeScript-Zod)
 - 2023-03-20：新增 Tailwind CSS 環境建置與相關語法 文章。 [連結](https://wei-docusaurus-vercel.vercel.app/docs/Tailwind/Tailwind-Setup)
 - 2023-03-20：新增 使用 Vite 快速建立 React + TypeScript + Tailwind CSS 專案 文章。 [連結](https://wei-docusaurus-vercel.vercel.app/docs/Vite/React-Ts-Tailwind)
@@ -17,3 +18,5 @@ git push --follow-tags
 - 2022-12-28：新增 React Router DOM v6 介紹 文章。 好冷 🥶 [連結](https://wei-docusaurus-vercel.vercel.app/docs/React/Package/React-Router-Dom-v6)
 - 2022-11-12：新增 React Slick 文章。 [連結](https://wei-docusaurus-vercel.vercel.app/docs/React/Package/React-Slick)
 <!-- UPDATE_WEISITE:END -->
+=======
+>>>>>>> 6743bff1a33164ca86c3e3c225bed3e05687a886
