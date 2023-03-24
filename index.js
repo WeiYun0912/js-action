@@ -135,7 +135,7 @@ Toolkit.run(async (tools) => {
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
     try {
-      // await commitReadmeFile();
+      await commitReadmeFile();
       tools.log.success("Commit file success");
     } catch (error) {
       tools.log.debug("Something went wrong");
@@ -176,7 +176,7 @@ Toolkit.run(async (tools) => {
   fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
   try {
-    // await commitReadmeFile();
+    await commitReadmeFile();
     tools.log.success("Commit file success");
   } catch (err) {
     tools.log.debug("Something went wrong");
