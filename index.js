@@ -179,7 +179,7 @@ Toolkit.run(async (tools) => {
 
   try {
     await commitReadmeFile();
-    tools.log.success("Commit file success");
+    tools.log.success("Commit file success.");
   } catch (err) {
     tools.log.debug("Something went wrong");
     return tools.exit.failure(err);
