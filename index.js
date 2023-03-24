@@ -14,7 +14,7 @@ const COMMIT_MSG = core.getInput("COMMIT_MSG");
 
 core.setSecret(GITHUB_TOKEN);
 
-const baseUrl = "https://weiyun0912.github.io";
+const baseUrl = "https://wei-docusaurus-vercel.vercel.app";
 
 const exec = (cmd, args = [], options = {}) =>
   new Promise((resolve, reject) => {
@@ -79,7 +79,7 @@ async function getBlogOutline() {
     };
 
     const link = baseUrl + $(el).children().attr("href");
-
+    console.log(link);
     logDetail.title = $(el).text();
     if (link.includes(" ")) {
       logDetail.link = link.replace(" ", "%20");
@@ -176,7 +176,7 @@ Toolkit.run(async (tools) => {
   fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
   try {
-    await commitReadmeFile();
+    // await commitReadmeFile();
     tools.log.success("Commit file success");
   } catch (err) {
     tools.log.debug("Something went wrong");
