@@ -63,7 +63,7 @@ const commitReadmeFile = async () => {
 // 爬自己的技術文章目錄
 async function getBlogOutline() {
   const { data } = await axios.get(
-    "https://weiyun0912.github.io/Wei-Docusaurus/docs/intro"
+    "https://wei-docusaurus-vercel.vercel.app/docs/intro"
   );
 
   const $ = cheerio.load(data);
