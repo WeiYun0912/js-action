@@ -79,7 +79,7 @@ async function getBlogOutline() {
     };
 
     const link = baseUrl + $(el).children().attr("href");
-    console.log(link);
+
     logDetail.title = $(el).text();
     if (link.includes(" ")) {
       logDetail.link = link.replace(" ", "%20");
@@ -90,6 +90,8 @@ async function getBlogOutline() {
   });
 
   const outlineFilter = outline.slice(0, MAX_LINES);
+
+  console.log(outlineFilter);
 
   return outlineFilter;
 }
@@ -135,7 +137,7 @@ Toolkit.run(async (tools) => {
     fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
     try {
-      await commitReadmeFile();
+      // await commitReadmeFile();
       tools.log.success("Commit file success");
     } catch (error) {
       tools.log.debug("Something went wrong");
@@ -176,7 +178,7 @@ Toolkit.run(async (tools) => {
   fs.writeFileSync("./README.md", readmeContent.join("\n"));
 
   try {
-    await commitReadmeFile();
+    // await commitReadmeFile();
     tools.log.success("Commit file success");
   } catch (err) {
     tools.log.debug("Something went wrong");
